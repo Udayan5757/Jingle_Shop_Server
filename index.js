@@ -4,7 +4,7 @@ const adminRouter = require("./routes/admin");
 const authRouter = require('./routes/auth');
 const productRouter = require("./routes/product");
 const userRouter = require("./routes/user");
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 80;
 const app = express();
 const DB = "mongodb+srv://Udayan:DragonBallMongoDb@cluster0.5n0dpxb.mongodb.net/?retryWrites=true&w=majority";
 

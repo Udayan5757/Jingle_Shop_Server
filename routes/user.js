@@ -36,19 +36,19 @@ userRouter.post("/api/add-to-cart", auth, async (req, res) => {
 
 userRouter.get("/api/favorite", auth, async (req, res) => {
   try {
-    let result=false;
+    let result = false;
     let user = await User.findById(req.user);
     if (user.wishList.length == 0) {
       result = false;
     } else {
       for (let i = 0; i < user.wishList.length; i++) {
-        if (user.wishList[i].product.name==req.query.name) {
+        if (user.wishList[i].product.name == req.query.name) {
           result = user.wishList[i].isFavorite;
           break;
         }
       }
     }
-    res.json({"result":result});
+    res.json({ result: result });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -57,7 +57,7 @@ userRouter.get("/api/favorite-products", auth, async (req, res) => {
   try {
     let products = [];
     let user = await User.findById(req.user);
-    for(let i=0;i<user.wishList.length;i++){
+    for (let i = 0; i < user.wishList.length; i++) {
       products.push(user.wishList[i].product);
     }
     res.json(products);
@@ -104,7 +104,7 @@ userRouter.delete("/api/remove-from-wishList/:id", auth, async (req, res) => {
     let user = await User.findById(req.user);
     for (let i = 0; i < user.wishList.length; i++) {
       if (user.wishList[i].product._id.equals(product._id)) {
-        user.wishList.splice(i,1);
+        user.wishList.splice(i, 1);
         // if (user.cart[i].quantity == 1) {
         //   user.cart.splice(i, 1);
         // } else {
@@ -176,5 +176,19 @@ userRouter.get("/api/orders/me", auth, async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
-
+userRouter.put("/api/turn-to-user-admin", auth, async (req, res) => {
+  try {
+    console.log("Biswas");
+    let user = await User.findById(req.user);
+    if (user.type == "admin") {
+      user.type = "user";
+    } else {
+      user.type = "admin";
+    }
+    user = await user.save();
+    res.json(user.type);
+  } catch (error) {
+    res.status(500).json({ error: e.message });
+  }
+});
 module.exports = userRouter;
